@@ -8,160 +8,80 @@
 #include <tuple>
 #include <algorithm>
 #include "analysis.hh" 
+#include "histo.hh"
 
 using namespace std;
 
-//04.04
-//It works!!!
-//But! many things to improve:
-//Object for histograms
-//Get cross-section from sumofweights
-//
-//back to an old problem: how to get event info into read_lhe
-//not just particles
-
-
 //namespace FastPartons {
+
 //function prototypes
-vector<FastPartons::Particle> read_lhe(const char *lhefile);
-bool book(int nbins, double xmin, double xmax, vector<double> Xs, const char *outfile);
+void analyse_event(vector<FastPartons::Particle > Event);
+void read_lhe(const char *lhefile);
 
-const char *lhefile = "unweighted_events.lhe";  
+//book histograms here
+FastPartons::Histo Histo1(0.0, 1000., 20.);
 
-int main(){
 
-  double px,py,pz,E;
-  int pdg, stat;
-  FastPartons::newParticle Top;
-  FastPartons::newParticle Antitop;
-  vector<FastPartons::newParticle> Particles;
-  vector<FastPartons::Particle> p;
-
-  vector<FastPartons::newParticle > Tops;
-  vector<FastPartons::newParticle > Antitops;
-
-  p=read_lhe("unweighted_events.lhe"); 
-  
-  //kinematic variables to plot
-  double pt, mtt, yt;
-
-  //vectors to fill histograms
-  vector<double> toppt;
-
-  //example cut
-  const double cut = 400;
-  
-  //this should be events.size(), then for j=0; j<Particles.size()
-  for(int i=0; i<p.size(); i++){
-
-    pdg=std::get<0>(p.at(i));
-    stat=std::get<1>(p.at(i));
-    px=std::get<2>(p.at(i)); 
-    py=std::get<3>(p.at(i)); 
-    pz=std::get<4>(p.at(i)); 
-    E=std::get<5>(p.at(i)); 
-
-    if(pdg==6){     
-      Top.Px = px;
-      Top.Py = py;
-      Top.Pz = pz;
-      Top.E = E;
-      Tops.push_back(Top);   
-
-      //
-      mtt = (Top+Top).Mass(); 
-      //      cout << mtt << endl;
-
-      pt = Top.pT();  
-      if(pt > cut){
-	toppt.push_back(pt);
-      }
-
-    }   
-    else if(pdg==-6){     
-      Antitop.Px = px;
-      Antitop.Py = py;
-      Antitop.Pz = pz;
-      Antitop.E = E;
-      Antitops.push_back(Antitop);     
-    }  
-    
+//simple main function
+int main(int argc, char *argv[]){
+  if (argc != 2) {
+    cout << "Give input event file as argument" << endl;
+    return 0;
   }
 
-  cout << toppt.size() << endl;
-  book(10,0,1000,toppt,"pt_hist.dat");
-  
-  Tops.clear();  
-  Antitops.clear();
-  return 0; 
-}
+  const char *infile = argv[1];
+  read_lhe(infile); 
 
-//book and fill the histograms
-bool book(int nbins, double xmin, double xmax, vector<double> Xs, const char *outfile) {
-  
-  int count[nbins];
-  double binedge[nbins+1];
-  double bincentre[nbins];
-  
-  
-  for (int i=0; i<=nbins; i++){
-    binedge[i]=xmin+i*xmax/nbins;
-    //    cout << binedge[i] << endl;
-  }
 
-  double dx = fabs(binedge[0]-binedge[1]);
-  cout << dx << endl;
-
-  for (int i=0; i<nbins; i++){
-    count[i]=0;
-    bincentre[i]=binedge[i]+dx/2;
-  }
-
-  for (int i=0; i<Xs.size(); i++){
-    double X = Xs.at(i);
-    for (int i=0; i<nbins; i++){
-      if( X>binedge[i] && X<=binedge[i+1] ) {
-       	count[i]++;
-      }
-    }
-    if (X>binedge[nbins]) {
-      count[nbins-1]++;
-    }
-  }
-
-  int ncounts=0;
-  for (int i=0; i<nbins; i++){
-    cout << "bin" << i << " : " << count[i] << " entries" << endl;
-    ncounts+=count[i];
-  }
-  cout << ncounts << endl;
-
-  //new object for histo
-  //needs nbin
-  //const char *outfile = "pt_hist.dat";
-  std::ofstream fout;
-
-  fout.open(outfile);
-  for (int i=0; i<nbins; i++){
-    fout << bincentre[i] << "\t" << count[i] << "\t" << sqrt(count[i]) << endl;
-  }
-  fout.close();
+  //write out histograms to file
+  Histo1.write("mtt.dat");
 
   return 0;
 }
 
+void analyse_event(vector<FastPartons::Entry > Event) {
 
-//store particle momenta 
-//TODO: make this store one event, not all of them
-//we want read_event(i):
-//split this up somehow
+  double px,py,pz,E;
+  int pdg, stat;
 
-vector<FastPartons::Particle> read_lhe(const char *lhefile) {
+  //kinematic variables to plot
+  double pt, mtt, yt;
+
+  //Loop over particles in event
+  for(int i=0; i<Event.size(); i++){
+
+    pdg=std::get<0>(Event.at(i));
+    stat=std::get<1>(Event.at(i));
+    px=std::get<2>(Event.at(i)); 
+    py=std::get<3>(Event.at(i)); 
+    pz=std::get<4>(Event.at(i)); 
+    E=std::get<5>(Event.at(i)); 
+    
+    FastPartons::Particle Top;
+    FastPartons::Particle Antitop;
+
+    //only look at final state particles
+    //if (stat != 1) continue;
+
+    if(pdg==6){     
+      Top.setMomentum(px,py,pz,E);
+    }
+    
+    else if(pdg==-6){     
+      Antitop.setMomentum(px,py,pz,E);
+    }  
+   
+    mtt = (Top+Antitop).Mass();
+  }
+  Histo1.fill(mtt);
+
+  return; 
+}
+
+void read_lhe(const char *lhefile) {
   
-  FastPartons::Particle Particle;
-  vector<FastPartons::Particle > Particles;
-  vector<vector<FastPartons::Particle > > Events; //hideously slow
- 
+  FastPartons::Entry Particle;
+  vector<FastPartons::Entry > Event;
   ifstream fin(lhefile);
   
   //unused data
@@ -184,28 +104,25 @@ vector<FastPartons::Particle> read_lhe(const char *lhefile) {
         istringstream iss(line);
         iss >> npart >> procid >> weight >> scale;
 	while (true) {
+	  if (line == "<mgrwt>") {
+	    Event.pop_back();
+	    analyse_event(Event);
+	    break;
+	  }
           getline(fin, line);
-          if (line == "<mgrwt>") break;
           istringstream iss(line);
-          iss >> pdg >> stat >> moth1 >> moth2 >> col >> anticol >> px >> py >> pz >> e >> m;
+	  iss >> pdg >> stat >> moth1 >> moth2 >> col >> anticol >> px >> py >> pz >> e >> m;
 	  Particle=make_tuple(pdg,stat,px,py,pz,e);
-	  Particles.push_back(Particle);
+	  Event.push_back(Particle);
 	}
-	//	if(i>=10) break;
-	// break;
+	Event.clear();
       } 
     }
-    // cout << std::get<0>(Particles.at(0)) << endl;
-    return Particles;
-    //    return make_tuple(npart,weight,scale,Particles);
-    
-    Particles.clear();
-    Events.clear();
+    return;
   }
   else {
     cout << "Event file not found. Exiting" << endl;
     exit(1);
   }
 }
-
 
