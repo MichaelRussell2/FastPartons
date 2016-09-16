@@ -13,10 +13,6 @@
 using namespace std;
 using namespace FastPartons;
 
-//function prototypes
-void analyse_event(vector<FastPartons::LheEntry > Event, double weight);
-void read_lhe(const char *lhefile);
-
 //book histograms here
 Histo Histo1(0.0, 1000., 20.);
 

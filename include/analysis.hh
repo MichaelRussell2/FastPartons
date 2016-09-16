@@ -3,8 +3,10 @@
 
 using namespace std;
 
+
 namespace FastPartons {
 
+  
 //type definitions
   typedef tuple<int,int,double,double,double,double> Entry;
   
@@ -90,3 +92,6 @@ namespace FastPartons {
 
 }
   
+//function prototypes
+void read_lhe(const char *lhefile);
+void analyse_event(vector<FastPartons::LheEntry > Event, double weight);
