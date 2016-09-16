@@ -1,3 +1,6 @@
+#ifndef ANALYSIS_HH
+#define ANALYSIS_HH
+
 #include <cmath>
 #include <iostream>
 
@@ -40,28 +43,6 @@ namespace FastPartons {
     
   };
   
-  Particle Particle::operator+(const Particle& other) const {
-    Particle tmp = *this;
-    tmp.Px = this->Px + other.Px;
-    tmp.Py = this->Py + other.Py;
-    tmp.Pz = this->Pz + other.Pz;
-    tmp.E = this->E + other.E;
-    return tmp; 
-    
-  }
-
-  Particle Particle::operator-(const Particle& other) const {
-    Particle tmp = *this;
-    tmp.Px = this->Px - other.Px;
-    tmp.Py = this->Py - other.Py;
-    tmp.Pz = this->Pz - other.Pz;
-    tmp.E = this->E - other.E;
-    return tmp; 
-    
-  }
-
-
-
   class LheEntry {
 
   public:
@@ -78,6 +59,11 @@ namespace FastPartons {
     int moth1;
     int moth2;
 
+    double& Px(){return px;} 
+    double& Py(){return py;} 
+    double& Pz(){return pz;} 
+    double& E(){return e;} 
+
     LheEntry setData(int& pdg, int& stat,  double& px, double& py, double& pz, double& e){
       this->pdg = pdg;
       this->stat = stat;
@@ -93,5 +79,6 @@ namespace FastPartons {
 }
   
 //function prototypes
-void read_lhe(const char *lhefile);
-void analyse_event(vector<FastPartons::LheEntry > Event, double weight);
+extern void analyse_event(vector<FastPartons::LheEntry > Event, double weight);
+
+#endif

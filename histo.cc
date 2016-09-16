@@ -46,8 +46,6 @@ void FastPartons::Histo::write(const char *outfile){
   }
   fout.close();
 }
-  
-
 
 int FastPartons::Histo::bins(){
   return (int)((max-min)/binWidth);

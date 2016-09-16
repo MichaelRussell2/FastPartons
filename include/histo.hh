@@ -1,3 +1,6 @@
+#ifndef HISTO_HH
+#define HISTO_HH
+
 #include <iostream>
 #include <cmath>
 
@@ -34,3 +37,5 @@ public:
 };
 
 }
+
+#endif
