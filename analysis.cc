@@ -11,16 +11,17 @@
 #include "histo.hh"
 
 using namespace std;
-
-//namespace FastPartons {
+using namespace FastPartons;
 
 //function prototypes
-void analyse_event(vector<FastPartons::Particle > Event);
+void analyse_event(vector<FastPartons::LheEntry > Event, double weight);
 void read_lhe(const char *lhefile);
 
 //book histograms here
-FastPartons::Histo Histo1(0.0, 1000., 20.);
+Histo Histo1(0.0, 1000., 20.);
 
+//initialise weights
+double sumWeights = 0.;
 
 //simple main function
 int main(int argc, char *argv[]){
@@ -36,11 +37,14 @@ int main(int argc, char *argv[]){
   //write out histograms to file
   Histo1.write("mtt.dat");
 
+  cout << "Total cross-sec : " << sumWeights << " pb " << endl;
   return 0;
 }
 
-void analyse_event(vector<FastPartons::Entry > Event) {
+void analyse_event(vector<FastPartons::LheEntry > Event, double weight) {
 
+  sumWeights += weight;
+  
   double px,py,pz,E;
   int pdg, stat;
 
@@ -50,38 +54,32 @@ void analyse_event(vector<FastPartons::Entry > Event) {
   //Loop over particles in event
   for(int i=0; i<Event.size(); i++){
 
-    pdg=std::get<0>(Event.at(i));
-    stat=std::get<1>(Event.at(i));
-    px=std::get<2>(Event.at(i)); 
-    py=std::get<3>(Event.at(i)); 
-    pz=std::get<4>(Event.at(i)); 
-    E=std::get<5>(Event.at(i)); 
-    
-    FastPartons::Particle Top;
-    FastPartons::Particle Antitop;
+    LheEntry Entry = Event.at(i);
+    Particle t;
+    Particle tbar;
 
     //only look at final state particles
-    //if (stat != 1) continue;
+    //if (Entry.stat != 1) continue;
 
-    if(pdg==6){     
-      Top.setMomentum(px,py,pz,E);
+    if(Entry.pdg==6){     
+      t.setMomentum(Entry.px,Entry.py,Entry.pz,Entry.e);
     }
     
-    else if(pdg==-6){     
-      Antitop.setMomentum(px,py,pz,E);
+    else if(Entry.pdg==-6){     
+      tbar.setMomentum(Entry.px,Entry.py,Entry.pz,Entry.e);
     }  
    
-    mtt = (Top+Antitop).Mass();
+    mtt = (t+tbar).Mass();
   }
-  Histo1.fill(mtt);
+  Histo1.fill(mtt,weight);
 
   return; 
 }
 
 void read_lhe(const char *lhefile) {
   
-  FastPartons::Entry Particle;
-  vector<FastPartons::Entry > Event;
+  LheEntry Entry;
+  vector<LheEntry > Event;
   ifstream fin(lhefile);
   
   //unused data
@@ -106,14 +104,14 @@ void read_lhe(const char *lhefile) {
 	while (true) {
 	  if (line == "<mgrwt>") {
 	    Event.pop_back();
-	    analyse_event(Event);
+	    analyse_event(Event, weight);
 	    break;
 	  }
           getline(fin, line);
           istringstream iss(line);
 	  iss >> pdg >> stat >> moth1 >> moth2 >> col >> anticol >> px >> py >> pz >> e >> m;
-	  Particle=make_tuple(pdg,stat,px,py,pz,e);
-	  Event.push_back(Particle);
+	  Entry.setData(pdg,stat,px,py,pz,e);
+	  Event.push_back(Entry);
 	}
 	Event.clear();
       } 

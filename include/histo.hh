@@ -12,6 +12,7 @@ public:
   Histo(double xmin, double xmax, double binWidth);
   
   void fill(double entry);
+  void fill(double entry, double weight);
   void write(const char *outfile);
   int bins();                    
   int count(int bin);         

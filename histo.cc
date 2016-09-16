@@ -10,6 +10,7 @@ FastPartons::Histo::Histo(double xmin, double xmax, double bw){
   binCount = (int)((max-min)/binWidth);
 }
 
+//fill histo with number of events only
 void FastPartons::Histo::fill(double entry) {
   int bin = (int)((entry - min) / binWidth);
   if (bin < 0) {
@@ -20,6 +21,20 @@ void FastPartons::Histo::fill(double entry) {
   } 
   else {
     counts[bin]+=1.;
+  }
+}
+
+//fill histo with event weights
+void FastPartons::Histo::fill(double entry, double weight) {
+  int bin = (int)((entry - min) / binWidth);
+  if (bin < 0) {
+    underflowcount++;
+  } 
+  else if (bin >= binCount) {
+    overflowcount++;
+  } 
+  else {
+    counts[bin]+=weight;
   }
 }
 

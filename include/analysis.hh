@@ -58,4 +58,35 @@ namespace FastPartons {
     
   }
 
+
+
+  class LheEntry {
+
+  public:
+    
+    int pdg;
+    int stat;
+    double px;
+    double py;
+    double pz;
+    double e;
+
+    int col;
+    int anticol;
+    int moth1;
+    int moth2;
+
+    LheEntry setData(int& pdg, int& stat,  double& px, double& py, double& pz, double& e){
+      this->pdg = pdg;
+      this->stat = stat;
+      this->px = px;
+      this->py = py;
+      this->pz = pz;
+      this->e = e;
+      return *this;
+
+    }
+  };
+
 }
+  
