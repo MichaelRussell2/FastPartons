@@ -5,16 +5,10 @@
 #include <iostream>
 
 using namespace std;
-
-
 namespace FastPartons {
 
-  
-//type definitions
-  typedef tuple<int,int,double,double,double,double> Entry;
-  
   class Particle {
-
+    
   public:
     
     int Pdg;
@@ -23,11 +17,11 @@ namespace FastPartons {
     double Py;
     double Pz;
     double E;
-   
+    
     double pT(){return(sqrt(Px*Px+Py*Py));}
     double Mass(){return(sqrt(E*E-Px*Px-Py*Py-Pz*Pz));}
     double y(){return(0.5*(log((E+Pz)/(E-Pz))));}
-
+    
     Particle setMomentum(double& Px, double& Py, double& Pz, double& E){
       this->Px = Px;
       this->Py = Py;
@@ -35,7 +29,6 @@ namespace FastPartons {
       this->E = E;
       return *this;
     }
-
     
     //overload operators for Particle class
     Particle operator+(const Particle& other) const;
@@ -43,8 +36,26 @@ namespace FastPartons {
     
   };
   
+  inline Particle Particle::operator+(const Particle& other) const {
+    Particle tmp = *this;
+    tmp.Px = this->Px + other.Px;
+    tmp.Py = this->Py + other.Py;
+    tmp.Pz = this->Pz + other.Pz;
+    tmp.E = this->E + other.E;
+    return tmp;   
+}
+  
+  inline Particle Particle::operator-(const Particle& other) const {
+    Particle tmp = *this;
+    tmp.Px = this->Px - other.Px;
+    tmp.Py = this->Py - other.Py;
+    tmp.Pz = this->Pz - other.Pz;
+    tmp.E = this->E - other.E;
+    return tmp;   
+  } 
+  
   class LheEntry {
-
+    
   public:
     
     int pdg;
@@ -53,17 +64,17 @@ namespace FastPartons {
     double py;
     double pz;
     double e;
-
+    
     int col;
     int anticol;
     int moth1;
     int moth2;
-
+    
     double& Px(){return px;} 
     double& Py(){return py;} 
     double& Pz(){return pz;} 
     double& E(){return e;} 
-
+    
     LheEntry setData(int& pdg, int& stat,  double& px, double& py, double& pz, double& e){
       this->pdg = pdg;
       this->stat = stat;
@@ -75,10 +86,10 @@ namespace FastPartons {
 
     }
   };
-
-}
   
+}
+
 //function prototypes
-extern void analyse_event(vector<FastPartons::LheEntry > Event, double weight);
+void analyse_event(vector<FastPartons::LheEntry > Event, double weight);
 
 #endif

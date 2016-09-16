@@ -13,24 +13,6 @@
 using namespace std;
 using namespace FastPartons;
 
-Particle Particle::operator+(const Particle& other) const {
-  Particle tmp = *this;
-  tmp.Px = this->Px + other.Px;
-  tmp.Py = this->Py + other.Py;
-  tmp.Pz = this->Pz + other.Pz;
-  tmp.E = this->E + other.E;
-  return tmp;   
-}
-
-Particle Particle::operator-(const Particle& other) const {
-  Particle tmp = *this;
-  tmp.Px = this->Px - other.Px;
-  tmp.Py = this->Py - other.Py;
-  tmp.Pz = this->Pz - other.Pz;
-  tmp.E = this->E - other.E;
-  return tmp;   
-} 
-
 void read_lhe(const char *lhefile) {
   
   LheEntry Entry;
@@ -52,7 +34,7 @@ void read_lhe(const char *lhefile) {
     while(getline(fin,line)){      
       if(line == "<event>"){
 	i+=1;
-	//	cout << "At event " <<  i << endl;
+	if (i % 10000 == 0) cout << "At event " <<  i << endl;
 	getline(fin, line);
         istringstream iss(line);
         iss >> npart >> procid >> weight >> scale;
