@@ -16,7 +16,7 @@ using namespace FastPartons;
 void read_lhe(const char *lhefile) {
   
   LheEntry Entry;
-  vector<LheEntry > Event;
+  vector<LheEntry> Event;
   ifstream fin(lhefile);
   
   //unused data
@@ -27,7 +27,7 @@ void read_lhe(const char *lhefile) {
   double weight, scale;
   double px, py, pz, e, m;
   int pdg,stat;
-
+  
   if(fin){
     string line;
     int i=0;
@@ -45,7 +45,7 @@ void read_lhe(const char *lhefile) {
 	    break;
 	  }
           getline(fin, line);
-          istringstream iss(line);
+	  istringstream iss(line);
 	  iss >> pdg >> stat >> moth1 >> moth2 >> col >> anticol >>px >> py >> pz >> e >> m;
 	  Entry.setData(pdg,stat,px,py,pz,e);
 	  Event.push_back(Entry);
@@ -53,6 +53,7 @@ void read_lhe(const char *lhefile) {
 	Event.clear();
       } 
     }
+    cout << "Analysed " << i << " events" << endl;
     return;
   }
   else {

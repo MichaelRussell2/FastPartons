@@ -1,12 +1,15 @@
-#include "histo.hh"
 #include <cmath>
 #include <iostream>
 #include <fstream>
+#include "histo.hh"
 
-FastPartons::Histo::Histo(double xmin, double xmax, double bw){
+FastPartons::Histo::Histo() {}
+FastPartons::Histo::~Histo() {}
+
+FastPartons::Histo::Histo(const double xmin, const double xmax, const double deltax){
   min = xmin;
   max = xmax;
-  binWidth = bw;
+  binWidth = deltax;
   binCount = (int)((max-min)/binWidth);
 }
 
@@ -27,15 +30,7 @@ void FastPartons::Histo::fill(double entry) {
 //fill histo with event weights
 void FastPartons::Histo::fill(double entry, double weight) {
   int bin = (int)((entry - min) / binWidth);
-  if (bin < 0) {
-    underflowcount++;
-  } 
-  else if (bin >= binCount) {
-    overflowcount++;
-  } 
-  else {
-    counts[bin]+=weight;
-  }
+    counts[bin]+=weight;  
 }
 
 void FastPartons::Histo::write(const char *outfile){

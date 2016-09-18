@@ -90,6 +90,6 @@ namespace FastPartons {
 }
 
 //function prototypes
-void analyse_event(vector<FastPartons::LheEntry > Event, double weight);
+void analyse_event(vector<FastPartons::LheEntry> Event, double weight);
 
 #endif
