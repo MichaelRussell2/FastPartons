@@ -58,24 +58,33 @@ namespace FastPartons {
     
   public:
     
-    int pdg;
-    int stat;
+    //    int pdg;
+    //    int stat;
     double px;
     double py;
     double pz;
     double e;
     
-    int col;
-    int anticol;
-    int moth1;
-    int moth2;
+    //    int col;
+    //    int anticol;
+    //    int moth1;
+    //    int moth2;
+    
+    double pdg;
+    double stat;
+    double col;
+    double anticol;
+    double moth1;
+    double moth2;
+
     
     double& Px(){return px;} 
     double& Py(){return py;} 
     double& Pz(){return pz;} 
     double& E(){return e;} 
     
-    LheEntry setData(int& pdg, int& stat,  double& px, double& py, double& pz, double& e){
+    //    LheEntry setData(int& pdg, int& stat,  double& px, double& py, double& pz, double& e){
+    LheEntry setData(double& pdg, double& stat,  double& px, double& py, double& pz, double& e){
       this->pdg = pdg;
       this->stat = stat;
       this->px = px;

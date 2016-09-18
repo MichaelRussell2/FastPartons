@@ -1,7 +1,7 @@
 
 CXX=g++ 
-#BOOST_ROOT=/Users/michael/Programs/boost_1_55_0/
-INCDIR=-Iinclude #-isystem$(BOOST_ROOT)
+BOOST_ROOT=/Users/michael/Programs/boost_1_55_0/
+INCDIR=-Iinclude -isystem$(BOOST_ROOT)
 CXXFLAGS=--std=c++11 -m64 -fPIC -O2 -march=native $(INCDIR)
 LDFLAGS= 
 FLAGS= -Wall -Wextra
