@@ -3,6 +3,8 @@
 A simple C++ program for reading les houches event files and making basic  
 1-dimensional histograms.  
 
+Design goals:  simplicity, speed, minimal overhead
+
 Requires the [Boost](http://www.boost.org/) C++ libraries.  
 
 ## Instructions
