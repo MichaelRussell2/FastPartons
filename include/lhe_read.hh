@@ -6,6 +6,6 @@
 
 using namespace std;
 
-void read_lhe(const char *lhefile);
+void read_lhe(const string& lhefile);
 
 #endif
