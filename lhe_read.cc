@@ -42,7 +42,7 @@ void read_lhe(const string& lhefile) {
 	weight = event[2];
 	event.clear();
 	while (true) {
-	  if (line == "<mgrwt>") {
+	  if (line == "<mgrwt>" || line == "</event>") {
 	    analyse_event(Event, weight);
 	    break;
 	  }
