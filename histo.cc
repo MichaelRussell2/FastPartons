@@ -4,8 +4,8 @@
 #include <vector>
 #include "histo.hh"
 
-FastPartons::Histo::Histo() {}
-FastPartons::Histo::~Histo() {}
+//FastPartons::Histo::Histo() {}
+//FastPartons::Histo::~Histo() {}
 
 FastPartons::Histo::Histo(const double xmin, const double xmax, const double deltax){
   min = xmin;
@@ -17,6 +17,8 @@ FastPartons::Histo::Histo(const double xmin, const double xmax, const double del
 
 //fill histo with number of events only
 void FastPartons::Histo::fill(double entry) {
+  cout << "min    "  << min << endl;
+  cout << "max    "  << max << endl;
   int bin = (int)((entry - min) / binWidth);
   if (bin < 0) {
     underflowcount++;

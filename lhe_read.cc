@@ -17,7 +17,9 @@ using namespace FastPartons;
 namespace qi = boost::spirit::qi;
 namespace ascii = boost::spirit::ascii;
 
-void read_lhe(const char *lhefile) {
+void read_lhe(const string& lhefile) {
+
+  cout << lhefile << endl;
   
   LheEntry Entry;
   vector<LheEntry> Event;
@@ -27,10 +29,11 @@ void read_lhe(const char *lhefile) {
   if(fin){
     string line;
     int i=0;
-    while(getline(fin,line)){      
+    while(getline(fin,line)){  
       if(line == "<event>"){
 	i+=1;
 	if (i % 10000 == 0) cout << "At event " <<  i << endl;
+	//	if (i > 1) break;
 	getline(fin, line);
 	//event: npart, procid, weight, scale;
 	vector<double> event;	  

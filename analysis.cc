@@ -23,17 +23,18 @@ Histo Histo2(0,1000,10);
 Histo Histo3(-2.5,2.5,0.1);
 
 //simple main function
-int main(int argc, char *argv[]){
+int main(int argc, const char** argv){
+
   if (argc != 2) {
     cout << "Give input event file as argument" << endl;
     return 0;
-  }
-  
-  const char *infile =argv[1];
+  }  
+  const string infile = argv[1];
+  cout << "FOO" << endl;
+
   read_lhe(infile); 
 
-
-  //write out histograms to file
+  //write out histograms to file 
   Histo1.write("mtt.dat");
   Histo2.write("pt.dat");
   Histo3.write("yt.dat");

@@ -10,13 +10,14 @@ namespace FastPartons{
   class Histo {
   public:
     
-    Histo();
+    //    Histo();
     //    ~Histo();
     
     //constructor
     Histo(double xmin, double xmax, double binWidth);
 
     
+    void book(double xmin, double xmax, double binWidth);
     void fill(double entry);
     void fill(double entry, double weight);
     void write(const char *outfile);
@@ -28,7 +29,7 @@ namespace FastPartons{
     double upperBound(int bin);
    
     
-    virtual ~Histo();
+    //virtual ~Histo();
     
   private:
     double min;
