@@ -19,8 +19,8 @@ double sumWeights = 0.;
 
 //book histograms here 
 Histo Histo1(0,2000,50);
-//Histo Histo2(0,1000,10);
-//Histo Histo3(-2.5,2.5,0.1);
+Histo Histo2(0,1000,10);
+Histo Histo3(-2.5,2.5,0.1);
 
 //simple main function
 int main(int argc, char *argv[]){
@@ -35,8 +35,8 @@ int main(int argc, char *argv[]){
 
   //write out histograms to file
   Histo1.write("mtt.dat");
-  //  Histo2.write("pt.dat");
-  //  Histo3.write("yt.dat");
+  Histo2.write("pt.dat");
+  Histo3.write("yt.dat");
 
   cout << "Total cross-sec : " << sumWeights << " pb " << endl;
   return 0;
@@ -74,7 +74,7 @@ void analyse_event(vector<FastPartons::LheEntry> Event, double weight) {
 
   }
   Histo1.fill(mtt,weight);
-  //  Histo2.fill(pt,weight);
-  //  Histo3.fill(yt,weight);
+  Histo2.fill(pt,weight);
+  Histo3.fill(yt,weight);
   return; 
 }

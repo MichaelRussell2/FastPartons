@@ -1,6 +1,7 @@
 #include <cmath>
 #include <iostream>
 #include <fstream>
+#include <vector>
 #include "histo.hh"
 
 FastPartons::Histo::Histo() {}
@@ -11,6 +12,7 @@ FastPartons::Histo::Histo(const double xmin, const double xmax, const double del
   max = xmax;
   binWidth = deltax;
   binCount = (int)((max-min)/binWidth);
+  counts = vector<double>(binCount,0);
 }
 
 //fill histo with number of events only
@@ -29,8 +31,10 @@ void FastPartons::Histo::fill(double entry) {
 
 //fill histo with event weights
 void FastPartons::Histo::fill(double entry, double weight) {
+  if ( entry < min || entry > max ) return;
   int bin = (int)((entry - min) / binWidth);
-    counts[bin]+=weight;  
+  counts[bin]+=weight;
+  return;
 }
 
 void FastPartons::Histo::write(const char *outfile){
@@ -40,6 +44,7 @@ void FastPartons::Histo::write(const char *outfile){
     fout << lowerBound(i) << "  " << upperBound(i) << "  " << counts[i] << endl;
   }
   fout.close();
+  counts.clear();
 }
 
 int FastPartons::Histo::bins(){

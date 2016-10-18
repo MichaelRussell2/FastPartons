@@ -36,7 +36,7 @@ namespace FastPartons{
     double binWidth;
     int binCount;
     int underflowcount, overflowcount;
-    double counts[];
+    vector<double> counts;
 
   };  
 }
