@@ -7,6 +7,8 @@
 using namespace std;
 namespace FastPartons {
 
+#define SkipEvent {return;}
+  
   class Particle {
     
   public:
@@ -20,7 +22,25 @@ namespace FastPartons {
     
     double pT(){return(sqrt(Px*Px+Py*Py));}
     double Mass(){return(sqrt(E*E-Px*Px-Py*Py-Pz*Pz));}
+    double ET(){return(sqrt(Mass()*Mass()+pT()*pT()));}
     double y(){return(0.5*(log((E+Pz)/(E-Pz))));}
+
+    double eta(){
+      if (Px == 0 && Py == 0) return 1000.;
+      if (Pz == 0) return 0.;
+      
+      double theta = atan(pT()/Pz);
+      if (theta < 0) theta += pi;
+      return -log(tan(theta/2));
+    }
+
+    double phi(){
+      if (Px == 0 && Py == 0) return 0.;
+      double _phi = atan2(Py,Px);
+      if (_phi < 0.0) _phi += 2*pi;
+      if (_phi >= 2*pi) _phi -= 2*pi; 
+      return _phi;
+    }
     
     Particle setMomentum(double& Px, double& Py, double& Pz, double& E){
       this->Px = Px;
@@ -33,8 +53,19 @@ namespace FastPartons {
     //overload operators for Particle class
     Particle operator+(const Particle& other) const;
     Particle operator-(const Particle& other) const;
-    
+
+  private:
+    double pi = 4*atan(1); 
+        
   };
+
+  inline bool SortByPt(Particle p1, Particle p2){
+    return p1.pT() > p2.pT();
+  }
+
+  inline double deltaR(Particle p1, Particle p2){
+    return sqrt(pow(p1.eta()-p2.eta(),2)+pow(p1.phi()-p2.phi(),2));
+  }
   
   inline Particle Particle::operator+(const Particle& other) const {
     Particle tmp = *this;
@@ -52,23 +83,18 @@ namespace FastPartons {
     tmp.Pz = this->Pz - other.Pz;
     tmp.E = this->E - other.E;
     return tmp;   
-  } 
+  }
+
+  
   
   class LheEntry {
     
   public:
     
-    //    int pdg;
-    //    int stat;
     double px;
     double py;
     double pz;
     double e;
-    
-    //    int col;
-    //    int anticol;
-    //    int moth1;
-    //    int moth2;
     
     double pdg;
     double stat;
@@ -77,13 +103,11 @@ namespace FastPartons {
     double moth1;
     double moth2;
 
-    
     double& Px(){return px;} 
     double& Py(){return py;} 
     double& Pz(){return pz;} 
     double& E(){return e;} 
     
-    //    LheEntry setData(int& pdg, int& stat,  double& px, double& py, double& pz, double& e){
     LheEntry setData(double& pdg, double& stat,  double& px, double& py, double& pz, double& e){
       this->pdg = pdg;
       this->stat = stat;

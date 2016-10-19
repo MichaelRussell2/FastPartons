@@ -19,8 +19,6 @@ namespace ascii = boost::spirit::ascii;
 
 void read_lhe(const string& lhefile) {
 
-  cout << lhefile << endl;
-  
   LheEntry Entry;
   vector<LheEntry> Event;
   ifstream fin(lhefile);  
@@ -33,7 +31,6 @@ void read_lhe(const string& lhefile) {
       if(line == "<event>"){
 	i+=1;
 	if (i % 10000 == 0) cout << "At event " <<  i << endl;
-	//	if (i > 1) break;
 	getline(fin, line);
 	//event: npart, procid, weight, scale;
 	vector<double> event;	  

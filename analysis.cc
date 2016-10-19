@@ -30,15 +30,13 @@ int main(int argc, const char** argv){
     return 0;
   }  
   const string infile = argv[1];
-  cout << "FOO" << endl;
 
   read_lhe(infile); 
 
   //write out histograms to file 
   Histo1.write("mtt.dat");
   Histo2.write("pt.dat");
-  Histo3.write("yt.dat");
-
+  Histo3.write("yt.dat"); 
   cout << "Total cross-sec : " << sumWeights << " pb " << endl;
   return 0;
 }
@@ -49,13 +47,13 @@ void analyse_event(vector<FastPartons::LheEntry> Event, double weight) {
   
   //kinematic variables to plot
   double pt, mtt, yt;
+  Particle t;
+  Particle tbar;
 
   //Loop over particles in event
   for(int i=0; i<Event.size(); i++){
 
     LheEntry Entry = Event.at(i);
-    Particle t;
-    Particle tbar;
 
     //only look at final state particles
     //if (Entry.stat != 1) continue;
@@ -71,8 +69,6 @@ void analyse_event(vector<FastPartons::LheEntry> Event, double weight) {
     mtt = (t+tbar).Mass();
     pt  = t.pT();
     yt  = t.y();
-
-
   }
   Histo1.fill(mtt,weight);
   Histo2.fill(pt,weight);
