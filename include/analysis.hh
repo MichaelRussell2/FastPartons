@@ -1,8 +1,15 @@
 #ifndef ANALYSIS_HH
 #define ANALYSIS_HH
 
-#include <cmath>
 #include <iostream>
+#include <sstream>
+#include <fstream>
+#include <valarray>
+#include <cmath>
+#include <cassert>
+#include <vector>
+#include <tuple>
+#include <algorithm>
 
 using namespace std;
 namespace FastPartons {

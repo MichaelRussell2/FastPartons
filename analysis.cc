@@ -1,15 +1,6 @@
-#include <iostream>
-#include <sstream>
-#include <fstream>
-#include <valarray>
-#include <cmath>
-#include <cassert>
-#include <vector>
-#include <tuple>
-#include <algorithm>
-#include "analysis.hh" 
-#include "histo.hh"
-#include "lhe_read.hh"
+#include <analysis.hh> 
+#include <histo.hh>
+#include <lhe_read.hh>
 
 using namespace std;
 using namespace FastPartons;
