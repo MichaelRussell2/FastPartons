@@ -70,10 +70,19 @@ namespace FastPartons {
     return p1.pT() > p2.pT();
   }
 
+  //@TODO: check this
   inline double deltaR(Particle p1, Particle p2){
     return sqrt(pow(p1.eta()-p2.eta(),2)+pow(p1.phi()-p2.phi(),2));
   }
-  
+
+  //constrain between [-pi, pi]
+  inline double deltaPhi(Particle p1, Particle p2){
+    double pi = 4*atan(1); 
+    double dPhi = p1.phi()-p2.phi();
+    if (dPhi < pi) dPhi += 2*pi;
+    if (dPhi > pi) dPhi += 2*pi;
+    return dPhi;
+  }
   inline Particle Particle::operator+(const Particle& other) const {
     Particle tmp = *this;
     tmp.Px = this->Px + other.Px;

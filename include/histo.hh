@@ -23,13 +23,14 @@ namespace FastPartons{
     void fill(double entry);
     void fill(double entry, double weight);
     void write(const char *outfile);
+    void write(const char *outfile, double norm);
     int bins();                    
     int count(int bin);         
     int getunderflowcount();// @TODO: define this     
     int getoverflowcount(); // @TODO: define this     
     double lowerBound(int bin);
     double upperBound(int bin);
-   
+    double integral();
     
     //virtual ~Histo();
     

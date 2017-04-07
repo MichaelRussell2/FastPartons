@@ -33,6 +33,7 @@ void FastPartons::Histo::fill(double entry, double weight) {
   return;
 }
 
+//write out raw histogram
 void FastPartons::Histo::write(const char *outfile){
  std::ofstream fout;
  fout.open(outfile);
@@ -41,6 +42,25 @@ void FastPartons::Histo::write(const char *outfile){
   }
   fout.close();
   counts.clear();
+}
+
+//write out normalised histogram
+void FastPartons::Histo::write(const char *outfile, double norm){
+ std::ofstream fout;
+ fout.open(outfile);
+  for (int i=0; i<binCount; i++){
+    fout << lowerBound(i) << "  " << upperBound(i) << "  " << counts[i]/norm << endl;
+  }
+  fout.close();
+  counts.clear();
+}
+
+double FastPartons::Histo::integral(){
+  double area = 0;
+  for (int i=0; i<binCount; i++){
+    area += counts[i];
+  }
+  return area;
 }
 
 int FastPartons::Histo::bins(){
