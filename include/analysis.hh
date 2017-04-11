@@ -80,9 +80,10 @@ namespace FastPartons {
     double pi = 4*atan(1); 
     double dPhi = p1.phi()-p2.phi();
     if (dPhi < pi) dPhi += 2*pi;
-    if (dPhi > pi) dPhi += 2*pi;
+    if (dPhi > pi) dPhi -= 2*pi;
     return dPhi;
   }
+  
   inline Particle Particle::operator+(const Particle& other) const {
     Particle tmp = *this;
     tmp.Px = this->Px + other.Px;
@@ -90,7 +91,7 @@ namespace FastPartons {
     tmp.Pz = this->Pz + other.Pz;
     tmp.E = this->E + other.E;
     return tmp;   
-}
+  }
   
   inline Particle Particle::operator-(const Particle& other) const {
     Particle tmp = *this;
