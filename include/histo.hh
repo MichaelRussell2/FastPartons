@@ -26,8 +26,10 @@ namespace FastPartons{
     void write(const char *outfile, double norm);
     int bins();                    
     int count(int bin);         
-    int getunderflowcount();// @TODO: define this     
-    int getoverflowcount(); // @TODO: define this     
+    double underflow();
+    double overflow();
+    void addOverflow();
+    void addUnderflow();
     double lowerBound(int bin);
     double upperBound(int bin);
     double integral();
@@ -40,6 +42,7 @@ namespace FastPartons{
     double binWidth;
     int binCount;
     int underflowcount, overflowcount;
+    double weightsOver, weightsUnder;
     vector<double> counts;
 
   };

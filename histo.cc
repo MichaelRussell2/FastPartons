@@ -9,8 +9,11 @@ FastPartons::Histo::Histo(const double xmin, const double xmax, const double del
   binWidth = deltax;
   binCount = (int)((max-min)/binWidth);
   counts = vector<double>(binCount,0);
+  weightsOver = 0.;
+  weightsUnder = 0.;
 }
 
+//@TODO: inherit from 1D histo???
 FastPartons::Histo2d::Histo2d(const double xmin, const double xmax, const double deltax, const double ymin, const double ymax, const double deltay){
   minx = xmin;
   maxx = xmax;
@@ -40,7 +43,12 @@ void FastPartons::Histo::fill(double entry) {
 
 //fill histo with event weights
 void FastPartons::Histo::fill(double entry, double weight) {
-  if ( entry < min || entry > max ) return;
+  if ( entry < min ) {
+    weightsUnder += weight;
+    return; }
+  else if ( entry > max ){
+    weightsOver += weight;
+    return; }
   int bin = (int)((entry - min) / binWidth);
   counts[bin]+=weight;
   return;
@@ -63,7 +71,6 @@ void FastPartons::Histo2d::fill(double xentry, double yentry, double weight) {
   counts2d[binx][biny] += weight;  
   return;
 }
-
 
 //write out raw histogram
 void FastPartons::Histo::write(const char *outfile){
@@ -111,6 +118,28 @@ void FastPartons::Histo2d::write(const char *outfile, double norm){
   }
   fout.close();
   counts2d.clear();
+}
+
+//underflow
+double FastPartons::Histo::underflow(){
+  return weightsUnder;
+}
+
+//overflow
+double FastPartons::Histo::overflow(){
+  return weightsOver;
+}
+
+//add underflow to first bin
+void FastPartons::Histo::addUnderflow(){
+  counts[0] += weightsUnder;
+  return;
+}
+
+//add overflow to last bin
+void FastPartons::Histo::addOverflow(){
+  counts[binCount-1] += weightsOver;
+  return;
 }
 
 //integral of a 1d histogram
