@@ -18,14 +18,10 @@ namespace FastPartons{
     //constructor
     Histo(double xmin, double xmax, double binWidth);
 
-    
-    void book(double xmin, double xmax, double binWidth);
     void fill(double entry);
     void fill(double entry, double weight);
     void write(const char *outfile);
     void write(const char *outfile, double norm);
-    int bins();                    
-    int count(int bin);         
     double underflow();
     double overflow();
     void addOverflow();
@@ -33,7 +29,7 @@ namespace FastPartons{
     double lowerBound(int bin);
     double upperBound(int bin);
     double integral();
-    
+    void sumw2();
     //virtual ~Histo();
     
   private:
@@ -41,10 +37,11 @@ namespace FastPartons{
     double max;
     double binWidth;
     int binCount;
-    int underflowcount, overflowcount;
+    int countsOver, countsUnder;
     double weightsOver, weightsUnder;
-    vector<double> counts;
-
+    vector<double> weights;
+    vector<int> counts;
+    bool useErrors;
   };
 
   //  class Histo2d: public Histo {
@@ -75,7 +72,7 @@ namespace FastPartons{
     double binWidthy;
     int binCountx;
     int binCounty;
-    vector< vector<double> > counts2d;
+    vector< vector<double> > weights2d;
   };
 }
 
