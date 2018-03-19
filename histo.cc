@@ -1,5 +1,6 @@
 #include <histo.hh>
 
+//@TODO: rebin, histeps option, setw
 //FastPartons::Histo::Histo() {}
 //FastPartons::Histo::~Histo() {}
 
